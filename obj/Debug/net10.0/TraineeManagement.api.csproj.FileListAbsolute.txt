@@ -47,3 +47,4 @@ C:\Users\smit.warang\Desktop\TraineeManagement\TraineeManagement.api\bin\Debug\n
 C:\Users\smit.warang\Desktop\TraineeManagement\TraineeManagement.api\bin\Debug\net10.0\NSwag.Generation.dll
 C:\Users\smit.warang\Desktop\TraineeManagement\TraineeManagement.api\bin\Debug\net10.0\NSwag.Generation.AspNetCore.dll
 C:\Users\smit.warang\Desktop\TraineeManagement\TraineeManagement.api\bin\Debug\net10.0\YamlDotNet.dll
+C:\Users\smit.warang\Desktop\TraineeManagement\TraineeManagement.api\obj\Debug\net10.0\TraineeManagement.api.sourcelink.json

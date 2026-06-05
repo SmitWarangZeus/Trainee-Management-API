@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-
+using TraineeManagement.api.Models;
+using TraineeManagement.api.DTOs;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/trainee")]
 public class TraineeController : ControllerBase
 {
     private static List<Trainee> trainees = new List<Trainee>
@@ -14,18 +15,38 @@ public class TraineeController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(trainees);
+        var traineesDTO = trainees.Select(t => new TraineeResponse
+        {
+            FirstName = t.FirstName,
+            LastName = t.LastName,
+            Email = t.Email,
+            TechStack = t.TechStack,
+            Status = t.Status,
+            CreatedDate = t.CreatedDate,
+            UpdatedDate = t.UpdatedDate
+        }).ToList();
+        return Ok(traineesDTO);
     }
 
     [HttpGet("{Id:int}")]
     public IActionResult GetById(int Id)
     {
-        Trainee trainee = trainees.FirstOrDefault(t => t.Id == Id);
+        var trainee = trainees.FirstOrDefault(t => t.Id == Id);
         if (trainee==null)
         {
             return NotFound();
         }
-        return Ok(trainee);
+        TraineeResponse traineeDTO = new TraineeResponse
+        {
+            FirstName = trainee.FirstName,
+            LastName = trainee.LastName,
+            Email = trainee.Email,
+            TechStack = trainee.TechStack,
+            Status = trainee.Status,
+            CreatedDate = trainee.CreatedDate,
+            UpdatedDate = trainee.UpdatedDate
+        };
+        return Ok(traineeDTO);
     }
 
     [HttpPost]
@@ -35,6 +56,14 @@ public class TraineeController : ControllerBase
         trainee.CreatedDate = DateTime.Now;
         trainee.UpdatedDate = DateTime.Now;
         trainees.Add(trainee);
-        return Ok(trainee);
+        CreateTraineeRequest createdTrainee = new CreateTraineeRequest
+        {
+            FirstName = trainee.FirstName,
+            LastName = trainee.LastName,
+            Email = trainee.Email,
+            TechStack = trainee.TechStack,
+            Status = trainee.Status
+        };
+        return Ok(createdTrainee);
     }
 }

@@ -1,4 +1,4 @@
-namespace TraineeManagement.api;
+namespace TraineeManagement.api.Models;
 
 public class Trainee
 {
