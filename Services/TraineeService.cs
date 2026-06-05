@@ -14,6 +14,7 @@ namespace TraineeManagement.api.Services
         {
             List<TraineeResponse> traineesDTO = _trainees.Select(t => new TraineeResponse
             {
+                Id = t.Id,
                 FirstName = t.FirstName,
                 LastName = t.LastName,
                 Email = t.Email,
@@ -38,7 +39,7 @@ namespace TraineeManagement.api.Services
         {
             Trainee trainee = new Trainee
             {
-                Id = _trainees.Max(t => t.Id)+1,
+                Id = _trainees.Any() ? _trainees.Max(t => t.Id) + 1 : 0,
                 FirstName = createTrainee.FirstName,
                 LastName = createTrainee.LastName,
                 Email = createTrainee.Email,
@@ -51,23 +52,30 @@ namespace TraineeManagement.api.Services
             return new TraineeResponse(trainee);
         }
 
-        // public bool Update(int id, TraineeDto dto)
-        // {
-        //     var Trainee = GetById(id);
-        //     if (Trainee == null) return false;
+        public bool Update(int Id, UpdateTraineeRequest updateTrainee)
+        {
+            Trainee? trainee = _trainees.FirstOrDefault(t => t.Id==Id);
+            if (trainee==null)
+            {
+                return false;
+            }
+            trainee.FirstName = updateTrainee.FirstName;
+            trainee.LastName = updateTrainee.LastName;
+            trainee.Email = updateTrainee.Email;
+            trainee.TechStack = updateTrainee.TechStack;
+            trainee.Status = updateTrainee.Status;
+            return true;
+        }
 
-        //     Trainee.Name = dto.Name;
-        //     Trainee.Price = dto.Price;
-        //     return true;
-        // }
-
-        // public bool Delete(int id)
-        // {
-        //     var Trainee = GetById(id);
-        //     if (Trainee == null) return false;
-
-        //     _Trainees.Remove(Trainee);
-        //     return true;
-        // }
+        public bool Delete(int Id)
+        {
+            Trainee? trainee = _trainees.FirstOrDefault(t => t.Id==Id);
+            if (trainee == null)
+            {
+                return false;
+            }
+            _trainees.Remove(trainee);
+            return true;
+        }
     }
 }

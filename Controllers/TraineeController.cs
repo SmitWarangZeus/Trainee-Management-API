@@ -5,7 +5,7 @@ using TraineeManagement.api.Services;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Route("/api/trainee")]
+[Route("/api/trainees")]
 public class TraineeController : ControllerBase
 {
     public readonly ITraineeService _service;
@@ -33,5 +33,17 @@ public class TraineeController : ControllerBase
     {
         TraineeResponse traineeResponse = _service.Create(createTrainee);
         return Ok(traineeResponse);
+    }
+
+    [HttpPut("{Id:int}")]
+    public IActionResult Update(int Id, UpdateTraineeRequest updateTrainee)
+    {
+        return _service.Update(Id, updateTrainee) ? Ok() : NotFound();
+    }
+
+    [HttpDelete("{Id:int}")]
+    public IActionResult Delete(int Id)
+    {
+        return _service.Delete(Id) ? NoContent() : NotFound();
     }
 }
