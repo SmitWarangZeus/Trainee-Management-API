@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 
@@ -5,76 +7,72 @@ namespace TraineeManagement.api.Services
 {
     public class TraineeService : ITraineeService
     {
-        private static List<Trainee> _trainees = new List<Trainee>
-        {
-            new Trainee {Id=0,FirstName="Smit",LastName="Warang",Email="smit@gmail.com",TechStack="CSS",Status="Active",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now}
-        };
+        private readonly TraineeContext _traineeContext;
 
-        public List<TraineeResponse> GetAll()
+        public TraineeService(TraineeContext traineeContext)
         {
-            List<TraineeResponse> traineesDTO = _trainees.Select(t => new TraineeResponse
-            {
-                Id = t.Id,
-                FirstName = t.FirstName,
-                LastName = t.LastName,
-                Email = t.Email,
-                TechStack = t.TechStack,
-                Status = t.Status
-            }).ToList();
-            return traineesDTO;
+            _traineeContext = traineeContext;
         }
 
-        public TraineeResponse? GetById(int Id)
+        public async Task<IEnumerable<TraineeResponse>> GetAllAsync(string? search)
         {
-            Trainee? trainee = _trainees.FirstOrDefault(t => t.Id==Id);
+            // string search="smit";
+            IQueryable<Trainee> trainees = from t in _traineeContext.Trainees select t;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                trainees = trainees.Where(t => t.Email.Contains(search)
+                || t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase)
+                || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase)
+                || t.TechStack.Contains(search,StringComparison.OrdinalIgnoreCase));
+            }
+            List<TraineeResponse> traineeResponses = await trainees.Select(t => new TraineeResponse(t)).ToListAsync();
+            return traineeResponses;
+        }
+
+        public async Task<TraineeResponse?> GetByIdAsync(int Id)
+        {
+            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 return null;
             }
-            TraineeResponse traineeDTO = new TraineeResponse(trainee);
-            return traineeDTO;
+            TraineeResponse traineeResponse = new TraineeResponse(trainee);
+            return traineeResponse;
         }
 
-        public TraineeResponse Create(CreateTraineeRequest createTrainee)
+        public async Task<TraineeResponse> CreateAsync(CreateTraineeRequest createTrainee)
         {
-            Trainee trainee = new Trainee
-            {
-                Id = _trainees.Any() ? _trainees.Max(t => t.Id) + 1 : 0,
-                FirstName = createTrainee.FirstName,
-                LastName = createTrainee.LastName,
-                Email = createTrainee.Email,
-                TechStack = createTrainee.TechStack,
-                Status = createTrainee.Status,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
-            };
-            _trainees.Add(trainee);
+            Trainee trainee = new Trainee(createTrainee);
+            _traineeContext.Trainees.Add(trainee);
+            await _traineeContext.SaveChangesAsync();
             return new TraineeResponse(trainee);
         }
 
-        public bool Update(int Id, UpdateTraineeRequest updateTrainee)
+        public async Task<TraineeResponse?> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
         {
-            Trainee? trainee = _trainees.FirstOrDefault(t => t.Id==Id);
+            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
-                return false;
+                return null;
             }
             trainee.FirstName = updateTrainee.FirstName;
             trainee.LastName = updateTrainee.LastName;
             trainee.Email = updateTrainee.Email;
             trainee.TechStack = updateTrainee.TechStack;
             trainee.Status = updateTrainee.Status;
-            return true;
+            await _traineeContext.SaveChangesAsync();
+            return new TraineeResponse(trainee);
         }
 
-        public bool Delete(int Id)
+        public async Task<bool> DeleteAsync(int Id)
         {
-            Trainee? trainee = _trainees.FirstOrDefault(t => t.Id==Id);
-            if (trainee == null)
+            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
+            if (trainee==null)
             {
                 return false;
             }
-            _trainees.Remove(trainee);
+            _traineeContext.Trainees.Remove(trainee);
+            await _traineeContext.SaveChangesAsync();
             return true;
         }
     }

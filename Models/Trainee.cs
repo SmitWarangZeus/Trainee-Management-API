@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using TraineeManagement.api.DTOs;
 
 namespace TraineeManagement.api.Models;
 
 public class Trainee
 {
+    static int Uid = 1;
+
     public int Id { get; set; }
 
     [Required(ErrorMessage = "First name is required")]
@@ -28,4 +31,18 @@ public class Trainee
     public DateTime CreatedDate { get; set; }
 
     public DateTime UpdatedDate { get; set; }
+
+    public Trainee(CreateTraineeRequest createTrainee)
+    {
+        Id = Uid++;
+        FirstName = createTrainee.FirstName;
+        LastName = createTrainee.LastName;
+        Email = createTrainee.Email;
+        TechStack = createTrainee.TechStack;
+        Status = createTrainee.Status;
+        CreatedDate = DateTime.Now;
+        UpdatedDate = DateTime.Now;
+    }
+
+    public Trainee(){}
 }
