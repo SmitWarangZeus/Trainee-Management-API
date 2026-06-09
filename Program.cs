@@ -1,15 +1,19 @@
 using TraineeManagement.api.Services;
 using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.Models;
+using MySql.EntityFrameworkCore.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+?? throw new InvalidOperationException("Connection string not found");
 
 // Add services to the container.
 
 builder.Services.AddScoped<ITraineeService, TraineeService>();
 
 builder.Services.AddDbContext<TraineeContext>(options =>
-    options.UseInMemoryDatabase("TraineeManagementDb"));
+    options.UseMySQL(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

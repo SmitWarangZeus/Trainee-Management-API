@@ -16,16 +16,16 @@ namespace TraineeManagement.api.Services
 
         public async Task<IEnumerable<TraineeResponse>> GetAllAsync(string? search)
         {
-            // string search="smit";
-            IQueryable<Trainee> trainees = from t in _traineeContext.Trainees select t;
+            IQueryable<Trainee> trainees = _traineeContext.Trainees.AsQueryable();
             if (!string.IsNullOrWhiteSpace(search))
             {
+                string searchLower = search.ToLower();
                 trainees = trainees.Where(t => t.Email.Contains(search)
-                || t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase)
-                || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase)
-                || t.TechStack.Contains(search,StringComparison.OrdinalIgnoreCase));
+                || t.FirstName.ToLower().Contains(searchLower)
+                || t.LastName.ToLower().Contains(searchLower)
+                || t.TechStack.ToLower().Contains(searchLower));
             }
-            List<TraineeResponse> traineeResponses = await trainees.Select(t => new TraineeResponse(t)).ToListAsync();
+            List<TraineeResponse> traineeResponses = await trainees.Select(t => new TraineeResponse(t)).AsNoTracking().ToListAsync();
             return traineeResponses;
         }
 

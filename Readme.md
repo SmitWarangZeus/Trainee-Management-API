@@ -9,7 +9,17 @@
 `git clone https://github.com/SmitWarangZeus/Trainee-Management-API`
 2. Navigate to folder
 `cd Trainee-Managemnt-API`
-3. Run Project
+3. Modify Connection string in appsettings.json
+```json
+"ConnectionStrings": {
+    "DefaultConnection": "your-connection-string"
+  }
+```
+4. Apply migration changes to your database
+```bash
+dotnet ef database update
+```
+5. Run Project
 `dotnet run`
 
 ## API List
@@ -166,7 +176,3 @@ curl -X 'DELETE' \
   'http://localhost:5175/api/trainees/1' \
   -H 'accept: */*'
 ```
-
-## Known Limitations
-- InMemory DB (Not persistent)
-- No authentication

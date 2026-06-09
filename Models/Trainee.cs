@@ -5,8 +5,6 @@ namespace TraineeManagement.api.Models;
 
 public class Trainee
 {
-    static int Uid = 1;
-
     public int Id { get; set; }
 
     [Required(ErrorMessage = "First name is required")]
@@ -34,7 +32,6 @@ public class Trainee
 
     public Trainee(CreateTraineeRequest createTrainee)
     {
-        Id = Uid++;
         FirstName = createTrainee.FirstName;
         LastName = createTrainee.LastName;
         Email = createTrainee.Email;
