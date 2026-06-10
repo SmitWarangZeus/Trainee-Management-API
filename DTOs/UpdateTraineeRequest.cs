@@ -6,21 +6,21 @@ namespace TraineeManagement.api.DTOs
     {
         [Required(ErrorMessage = "First name is required")]
         [StringLength(50, ErrorMessage = "Max length 50 characters")]
-        public string FirstName { get; set; } = "";
+        public string FirstName { get; set; } = null!;
 
         [Required(ErrorMessage = "Last name is required")]
         [StringLength(50, ErrorMessage = "Max length 50 characters")]
-        public string LastName { get; set; } = "";
+        public string LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
-        public string Email { get; set; } = "";
+        public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Techstack is required")]
-        public string TechStack { get; set; } = "";
+        public string TechStack { get; set; } = null!;
 
         [Required(ErrorMessage = "Name is required")]
         [AllowedValues(["Active","Inactive","Completed"], ErrorMessage = "Invalid status")]
-        public string Status { get; set; } = "";
+        public string Status { get; set; } = null!;
     }
 }

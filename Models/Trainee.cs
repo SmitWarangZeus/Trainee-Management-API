@@ -5,26 +5,20 @@ namespace TraineeManagement.api.Models;
 
 public class Trainee
 {
+    [Key]
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "First name is required")]
-    [StringLength(50, ErrorMessage = "Max length 50 characters")]
-    public string FirstName { get; set; } = "";
+    public int UserId { get; set; }
 
-    [Required(ErrorMessage = "Last name is required")]
-    [StringLength(50, ErrorMessage = "Max length 50 characters")]
-    public string LastName { get; set; } = "";
+    public string FirstName { get; set; } = null!;
 
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email format")]
-    public string Email { get; set; } = "";
+    public string LastName { get; set; } = null!;
 
-    [Required(ErrorMessage = "Techstack is required")]
-    public string TechStack { get; set; } = "";
+    public string Email { get; set; } = null!;
 
-    [Required(ErrorMessage = "Name is required")]
-    [AllowedValues(["Active","Inactive","Completed"], ErrorMessage = "Invalid status")]
-    public string Status { get; set; } = "";
+    public string TechStack { get; set; } = null!;
+
+    public string Status { get; set; } = null!;
 
     public DateTime CreatedDate { get; set; }
 

@@ -1,0 +1,55 @@
+Task 2.4: Create User Entity 
+Field        | Description 
+Id           | Primary key 
+Username     | Unique username 
+Email        | User email 
+PasswordHash | Hashed password only 
+Role         | Admin, Mentor, Trainee 
+CreatedDate  | Auto-generated 
+UpdatedDate  | Auto-generated 
+• Create Users table through EF Core migration. 
+• Do not return PasswordHash in any API response. 
+• Seed or create at least one Admin user for testing. 
+
+Task 2.5: Implement Password Hashing 
+    • Passwords must never be stored as plain text. 
+    • Store only PasswordHash in the Users table. 
+    • Verify the password during login using password verification logic. 
+    • Do not log passwords or password hashes. 
+
+Task 2.6: Create Login API 
+    POST /api/auth/login 
+Request: 
+{ 
+    "username": "admin", 
+    "password": "Admin@123" 
+} 
+Response: 
+{ 
+    "token": "jwt-token-value", 
+    "expiresIn": 3600, 
+    "user": { 
+        "id": 1, 
+        "username": "admin", 
+        "role": "Admin" 
+    } 
+} 
+
+Task 2.7: Add JWT Configuration 
+    • JWT settings should come from configuration. 
+    • The signing key should not be hardcoded inside controller code. Token should include useful claims: UserId, Username, Role. 
+{ 
+    "Jwt": { 
+        "Issuer": "TraineeManagementApi", 
+        "Audience": "TraineeManagementClient", 
+        "ExpiryMinutes": 60 
+    }
+} 
+
+Day 2 Deliverables 
+• Users table created through migration. 
+• Password hashing implemented. 
+• Login API working. 
+• JWT token generated successfully. 
+• Auth-related DTOs created. 
+• PasswordHash is not returned in responses. 

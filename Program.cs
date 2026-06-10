@@ -1,23 +1,44 @@
 using TraineeManagement.api.Services;
 using Microsoft.EntityFrameworkCore;
-using TraineeManagement.api.Models;
-using MySql.EntityFrameworkCore.Extensions;
+using TraineeManagement.api.Data;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 ?? throw new InvalidOperationException("Connection string not found");
 
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
 // Add services to the container.
 
 builder.Services.AddScoped<ITraineeService, TraineeService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<JwtService>();
 
-builder.Services.AddDbContext<TraineeContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+    };
+});
 
 var app = builder.Build();
 
@@ -32,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

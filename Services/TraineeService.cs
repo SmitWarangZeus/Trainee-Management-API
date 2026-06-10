@@ -1,22 +1,22 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
+using TraineeManagement.api.Data;
 
 namespace TraineeManagement.api.Services
 {
     public class TraineeService : ITraineeService
     {
-        private readonly TraineeContext _traineeContext;
+        private readonly AppDbContext _appDbContext;
 
-        public TraineeService(TraineeContext traineeContext)
+        public TraineeService(AppDbContext AppDbContext)
         {
-            _traineeContext = traineeContext;
+            _appDbContext = AppDbContext;
         }
 
         public async Task<IEnumerable<TraineeResponse>> GetAllAsync(string? search)
         {
-            IQueryable<Trainee> trainees = _traineeContext.Trainees.AsQueryable();
+            IQueryable<Trainee> trainees = _appDbContext.Trainees.AsQueryable();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 string searchLower = search.ToLower();
@@ -31,7 +31,7 @@ namespace TraineeManagement.api.Services
 
         public async Task<TraineeResponse?> GetByIdAsync(int Id)
         {
-            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
+            Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 return null;
@@ -43,14 +43,14 @@ namespace TraineeManagement.api.Services
         public async Task<TraineeResponse> CreateAsync(CreateTraineeRequest createTrainee)
         {
             Trainee trainee = new Trainee(createTrainee);
-            _traineeContext.Trainees.Add(trainee);
-            await _traineeContext.SaveChangesAsync();
+            _appDbContext.Trainees.Add(trainee);
+            await _appDbContext.SaveChangesAsync();
             return new TraineeResponse(trainee);
         }
 
         public async Task<TraineeResponse?> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
         {
-            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
+            Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 return null;
@@ -60,19 +60,19 @@ namespace TraineeManagement.api.Services
             trainee.Email = updateTrainee.Email;
             trainee.TechStack = updateTrainee.TechStack;
             trainee.Status = updateTrainee.Status;
-            await _traineeContext.SaveChangesAsync();
+            await _appDbContext.SaveChangesAsync();
             return new TraineeResponse(trainee);
         }
 
         public async Task<bool> DeleteAsync(int Id)
         {
-            Trainee? trainee = await _traineeContext.Trainees.FindAsync(Id);
+            Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 return false;
             }
-            _traineeContext.Trainees.Remove(trainee);
-            await _traineeContext.SaveChangesAsync();
+            _appDbContext.Trainees.Remove(trainee);
+            await _appDbContext.SaveChangesAsync();
             return true;
         }
     }
