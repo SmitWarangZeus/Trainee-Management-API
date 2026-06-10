@@ -1,0 +1,32 @@
+Task 2.1: Configure MySQL Provider 
+    • Replace UseInMemoryDatabase with MySQL database configuration. 
+    • Read the database connection string from appsettings.json. 
+    • Do not hardcode connection strings inside controllers or services. 
+{ 
+    "ConnectionStrings": { 
+        "DefaultConnection":  
+            "server=localhost;port=3306;database=trainee_management_db;user=root;password=your_password;" 
+    } 
+} 
+
+Task 2.2: Create EF Core Migration 
+    • Create migration for the existing Trainee entity. 
+    • Apply the migration to create the MySQL database schema. Verify that the Trainee table is created with the expected columns. 
+dotnet ef migrations add InitialCreate 
+dotnet ef database update 
+
+Task 2.3: Verify Existing APIs with MySQL 
+    • All existing trainee CRUD APIs should work with MySQL. 
+    • Create a trainee, restart the API, and verify the record still exists. Update Readme with MySQL setup and migration commands. 
+GET    /api/trainees 
+GET    /api/trainees/{id} 
+POST   /api/trainees 
+PUT    /api/trainees/{id} 
+DELETE /api/trainees/{id} 
+
+Day 1 Deliverables 
+• MySQL database configured. 
+• EF Core migration created and applied. 
+• Existing trainee APIs working with MySQL. 
+• README updated with database setup steps. 
+• Swagger/Postman evidence captured. 

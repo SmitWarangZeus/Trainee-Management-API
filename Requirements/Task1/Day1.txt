@@ -1,0 +1,59 @@
+Task 1.1: Create ASP.NET Core Web API Project
+Create a new project:
+    TraineeManagement.Api
+Expected output:
+    • Project runs successfully. 
+    • Swagger opens in browser. 
+    • Trainee understands basic project files: 
+        o Program.cs
+        o appsettings.json
+        o Controllers
+
+Task 1.2: Create Health Check API
+Create this API:
+    GET /api/health
+Expected response:
+{
+ "status": "running",
+ "application": "Trainee Management API",
+ "timestamp": "2026-06-03T10:30:00"
+}
+
+Task 1.3: Create Trainee Model
+Create a C# class:
+    Trainee
+Fields:
+    Id
+    FirstName
+    LastName
+    Email
+    TechStack
+    Status
+    CreatedDate
+    UpdatedDate
+
+Task 1.4: Create In-Memory Trainee List
+Create a temporary in-memory list to store trainee records.
+Example:
+    List<Trainee>
+
+Task 1.5: Create Basic GET and POST APIs
+Create these APIs:
+    GET /api/trainees
+    GET /api/trainees/{id}
+    POST /api/trainees
+Sample POST request:
+{
+ "firstName": "Amit",
+ "lastName": "Sharma",
+ "email": "amit.sharma@training.com",
+ "techStack": "HTML, CSS, JavaScript",
+ "status": "Active"
+}
+
+Day 1 Deliverables
+• Project runs successfully with Swagger/OpenAPI available.
+• Health API is working.
+• Trainee model is created.
+• GET all, GET by ID, and POST APIs are working with sample JSON.
+• Trainee has committed code to Git

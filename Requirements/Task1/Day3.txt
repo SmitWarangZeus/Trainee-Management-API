@@ -1,0 +1,27 @@
+Sample JSON Payloads
+Sample POST /api/trainees request:
+{
+ "firstName": "Amit",
+ "lastName": "Sharma",
+ "email": "amit.sharma@training.com",
+ "techStack": "HTML, CSS, JavaScript",
+ "status": "Active"
+}
+Sample validation error response:
+{
+ "errors": {
+ "firstName": ["First name is required"],
+ "email": ["Valid email is required"]
+ }
+}
+
+
+Day 3 Deliverables
+• EF Core InMemory setup is completed.
+• AppDbContext is created and registered.
+• Manual List<T> storage is removed from service logic.
+• CRUD APIs work using EF Core InMemory Database.
+• Search API is working.
+• README is added or updated.
+• Swagger/Postman testing evidence is available.
+• Trainee has committed code to Git

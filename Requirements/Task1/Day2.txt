@@ -1,0 +1,72 @@
+Task 2.1: Add DTOs
+Create the following DTOs:
+    CreateTraineeRequest
+    UpdateTraineeRequest
+    TraineeResponse
+Purpose:
+    • CreateTraineeRequest: used when adding a trainee 
+    • UpdateTraineeRequest: used when updating a trainee 
+    • TraineeResponse: used when returning trainee details
+
+Task 2.2: Add Validation
+Add validation rules:
+Field     | Rule
+FirstName | Required, max 50 characters
+LastName  | Required, max 50 characters
+Email     | Required, valid email format
+TechStack | Required
+Status    | Required and must be valid
+Expected validation error example:
+{
+ "errors": {
+ "firstName": ["First name is required"],
+ "email": ["Valid email is required"]
+ }
+}
+
+Task 2.3: Add Service Layer
+Create:
+    ITraineeService
+    TraineeService
+Suggested structure:
+    Controllers
+    Models
+    DTOs
+    Services
+Controller should only:
+    • Receive request 
+    • Call service 
+    • Return response 
+Service should:
+    • Hold business logic 
+    • Manage trainee data 
+    • Map model to response DTO 
+    • Validate trainee status if needed
+
+Task 2.4: Add PUT API
+Create:
+    PUT /api/trainees/{id}
+Purpose:
+    Update trainee details.
+Expected behavior:
+Scenario  | Response
+Valid     | trainee ID 200 OK
+Invalid   | trainee ID 404 Not Found
+Invalid   | request 400 Bad Request
+
+Task 2.5: Add DELETE API
+Create:
+    DELETE /api/trainees/{id}
+Expected behavior:
+Scenario  | Response
+Valid     | trainee ID 204 No Content
+Invalid   | trainee ID 404 Not Found
+
+Day 2 Deliverables
+• DTOs are created and used by APIs.
+• Validation is implemented and returns clear field-level errors.
+• Service layer is implemented and registered using dependency injection.
+• PUT and DELETE APIs are working.
+• Correct status codes are used for success, validation error, and not found scenarios.
+• Swagger/Postman testing evidence is available.
+• Trainee has committed code to Git
