@@ -24,8 +24,8 @@ namespace TraineeManagement.api.Services
                 Username = loginUser.Username,
                 Email = "admin@email.com",
                 Role = "admin",
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
             };
             user.SetPassword(loginUser.Password);
             _appDbContext.Users.Add(user);

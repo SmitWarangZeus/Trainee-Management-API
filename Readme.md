@@ -8,7 +8,7 @@
 1. Clone Github Repository
 `git clone https://github.com/SmitWarangZeus/Trainee-Management-API`
 2. Navigate to folder
-`cd Trainee-Managemnt-API`
+`cd Trainee-Management-API`
 3. Modify Connection string in appsettings.json
 ```json
 "ConnectionStrings": {

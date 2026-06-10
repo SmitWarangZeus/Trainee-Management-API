@@ -19,7 +19,7 @@ namespace TraineeManagement.api.DTOs
         [Required(ErrorMessage = "Techstack is required")]
         public string TechStack { get; set; } = null!;
 
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Status is required")]
         [AllowedValues(["Active","Inactive","Completed"], ErrorMessage = "Invalid status")]
         public string Status { get; set; } = null!;
     }
