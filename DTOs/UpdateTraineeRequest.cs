@@ -13,7 +13,7 @@ namespace TraineeManagement.api.DTOs
         public string LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Techstack is required")]

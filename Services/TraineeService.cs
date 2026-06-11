@@ -73,6 +73,7 @@ namespace TraineeManagement.api.Services
             trainee.Email = updateTrainee.Email;
             trainee.TechStack = updateTrainee.TechStack;
             trainee.Status = updateTrainee.Status;
+            trainee.UpdatedDate = DateTime.UtcNow;
             await _appDbContext.SaveChangesAsync();
             _logger.LogInformation("Trainee with id {} updated successfully", Id);
             return new TraineeResponse(trainee);
