@@ -14,19 +14,25 @@ namespace TraineeManagement.api.Services
             _appDbContext = AppDbContext;
         }
 
-        public async Task<IEnumerable<TraineeResponse>> GetAllAsync(string? search)
+        public async Task<PagedResponse<TraineeResponse>> GetAllAsync(PaginationParams paginationParams)
         {
-            IQueryable<Trainee> trainees = _appDbContext.Trainees.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(search))
+            IQueryable<Trainee> query = _appDbContext.Trainees.AsQueryable();
+            if (!string.IsNullOrEmpty(paginationParams.SearchTerm))
             {
-                string searchLower = search.ToLower();
-                trainees = trainees.Where(t => t.Email.Contains(search)
+                string searchLower = paginationParams.SearchTerm.ToLower();
+                query = query.Where(t => t.Email.Contains(paginationParams.SearchTerm)
                 || t.FirstName.ToLower().Contains(searchLower)
                 || t.LastName.ToLower().Contains(searchLower)
                 || t.TechStack.ToLower().Contains(searchLower));
             }
-            List<TraineeResponse> traineeResponses = await trainees.Select(t => new TraineeResponse(t)).AsNoTracking().ToListAsync();
-            return traineeResponses;
+            if (!string.IsNullOrEmpty(paginationParams.Status))
+            {
+                query = query.Where(t => t.Status == paginationParams.Status);
+            }
+            int totalRecords = await query.CountAsync();
+            List<TraineeResponse> trainees = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize).Take(paginationParams.PageSize).Select(t => new TraineeResponse(t)).AsNoTracking().ToListAsync();
+            PagedResponse<TraineeResponse> pagedResponse = new PagedResponse<TraineeResponse>(trainees, paginationParams.PageNumber, paginationParams.PageSize, totalRecords);
+            return pagedResponse;
         }
 
         public async Task<TraineeResponse?> GetByIdAsync(int Id)

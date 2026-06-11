@@ -31,8 +31,8 @@ public class Trainee
         Email = createTrainee.Email;
         TechStack = createTrainee.TechStack;
         Status = createTrainee.Status;
-        CreatedDate = DateTime.Now;
-        UpdatedDate = DateTime.Now;
+        CreatedDate = DateTime.UtcNow;
+        UpdatedDate = DateTime.UtcNow;
     }
 
     public Trainee(){}

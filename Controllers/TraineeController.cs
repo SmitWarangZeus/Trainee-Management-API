@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Services;
+using TraineeManagement.api.Models;
 
 namespace TraineeManagement.api.Controllers;
 
@@ -16,9 +17,9 @@ public class TraineeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] string? search)
+    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams paginationParams)
     {
-        IEnumerable<TraineeResponse> traineeResponses = await _service.GetAllAsync(search);
+        PagedResponse<TraineeResponse> traineeResponses = await _service.GetAllAsync(paginationParams);
         return Ok(traineeResponses);
     }
 
