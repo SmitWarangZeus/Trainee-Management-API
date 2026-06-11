@@ -17,13 +17,6 @@ namespace TraineeManagement.api.DTOs
             UserResponse = new UserResponse(user);
         }
 
-        public LoginResponse(User user)
-        {
-            Token = "jwt-token-value";
-            ExpiresIn = 3600;
-            UserResponse = new UserResponse(user);
-        }
-
         public LoginResponse(){}
     }
 }

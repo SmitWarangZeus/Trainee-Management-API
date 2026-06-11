@@ -31,9 +31,10 @@ namespace TraineeManagement.api.Services
                 UpdatedDate = DateTime.UtcNow
             };
             user.SetPassword(loginUser.Password);
+            string token = _jwtService.GenerateToken(user.Id, user.Username, user.Role);
             _appDbContext.Users.Add(user);
             await _appDbContext.SaveChangesAsync();
-            return new LoginResponse(user);
+            return new LoginResponse(user, token);
         }
 
         public async Task<LoginResponse?> Login(LoginRequest loginUser)

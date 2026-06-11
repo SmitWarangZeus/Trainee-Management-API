@@ -1,0 +1,40 @@
+Task 2.8: Protect APIs with JWT 
+Public               | APIs Protected APIs 
+GET /api/health      | GET /api/trainees 
+POST /api/auth/login | GET /api/trainees/{id} 
+                     | POST /api/trainees 
+                     | PUT /api/trainees/{id} 
+                     | DELETE /api/trainees/{id} 
+• No token should return 401 Unauthorized. 
+• Invalid token should return 401 Unauthorized. 
+• Valid token should allow the API call. 
+• Clients should send Authorization: Bearer <token>. 
+
+Task 2.9: Add Pagination, Search, and Status Filter 
+GET /api/trainees?pageNumber=1&pageSize=10&search=amit&status=Active 
+{ 
+    "pageNumber": 1, 
+    "pageSize": 10, 
+    "totalRecords": 25, 
+    "data": [] 
+}
+• Use pageNumber and pageSize query parameters. 
+• Support search and status filter together with pagination. 
+• Do not return large datasets blindly. Use Skip() and Take() appropriately.
+
+Task 2.10: Configure CORS for Phase 3 React Frontend 
+    • React frontend will be developed in Phase 3, but backend CORS should be prepared now. 
+    • Allow local React development origins such as http://localhost:3000 and http://localhost:5173. Do not use unrestricted CORS for production-style code. 
+
+Task 2.11: Add Structured Logging 
+    • Log user login success/failure. 
+    • Log trainee created, updated, and deleted events. 
+    • Log record-not-found cases and unexpected exceptions. 
+    • Do not log passwords, JWT tokens, or sensitive data. 
+
+Day 3 Deliverables 
+    • Trainee APIs protected using JWT. 
+    • Swagger/Postman testing with JWT completed. 
+    • Pagination, search, and status filter working together. 
+    • CORS configured for future React frontend. 
+    • Structured logging added.

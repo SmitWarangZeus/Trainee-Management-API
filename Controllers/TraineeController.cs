@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Services;
 using TraineeManagement.api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("/api/trainees")]
 public class TraineeController : ControllerBase
 {
