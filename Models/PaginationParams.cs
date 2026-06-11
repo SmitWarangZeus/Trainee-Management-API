@@ -1,21 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TraineeManagement.api.Models
 {
     public class PaginationParams
     {
-        private const int MaxPageSize = 50;
-
+        [Range(1, int.MaxValue, ErrorMessage = "Page number must be greater than 0")]
         public int PageNumber { get; set; } = 1;
 
-        private int _pageSize = 10;
-
-        public int PageSize
-        {
-            get => _pageSize;
-            set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
-        }
+        // private int _pageSize = 10;
+        [Range(1, int.MaxValue, ErrorMessage = "Page size must be greater than 0")]
+        public int PageSize { get; set; } = 10;
 
         public string SearchTerm { get; set; } = "";
-        
-        public string Status { get; set; } = "";
+
+        [AllowedValues(["Active","Inactive","Completed",null], ErrorMessage = "Invalid status")]
+        public string? Status { get; set; }
     }
 }

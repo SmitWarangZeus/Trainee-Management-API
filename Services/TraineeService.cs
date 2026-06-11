@@ -9,9 +9,12 @@ namespace TraineeManagement.api.Services
     {
         private readonly AppDbContext _appDbContext;
 
-        public TraineeService(AppDbContext AppDbContext)
+        private readonly ILogger<TraineeService> _logger;
+
+        public TraineeService(AppDbContext AppDbContext, ILogger<TraineeService> logger)
         {
             _appDbContext = AppDbContext;
+            _logger = logger;
         }
 
         public async Task<PagedResponse<TraineeResponse>> GetAllAsync(PaginationParams paginationParams)
@@ -40,9 +43,11 @@ namespace TraineeManagement.api.Services
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
+                _logger.LogInformation("Trainee with id {} was not found", Id);
                 return null;
             }
             TraineeResponse traineeResponse = new TraineeResponse(trainee);
+            _logger.LogInformation("Trainee with id {} found", Id);
             return traineeResponse;
         }
 
@@ -51,6 +56,7 @@ namespace TraineeManagement.api.Services
             Trainee trainee = new Trainee(createTrainee);
             _appDbContext.Trainees.Add(trainee);
             await _appDbContext.SaveChangesAsync();
+            _logger.LogInformation("Trainee with id {} created successfully", trainee.Id);
             return new TraineeResponse(trainee);
         }
 
@@ -59,6 +65,7 @@ namespace TraineeManagement.api.Services
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
+                _logger.LogInformation("Trainee with id {} was not found", Id);
                 return null;
             }
             trainee.FirstName = updateTrainee.FirstName;
@@ -67,6 +74,7 @@ namespace TraineeManagement.api.Services
             trainee.TechStack = updateTrainee.TechStack;
             trainee.Status = updateTrainee.Status;
             await _appDbContext.SaveChangesAsync();
+            _logger.LogInformation("Trainee with id {} updated successfully", Id);
             return new TraineeResponse(trainee);
         }
 
@@ -75,10 +83,12 @@ namespace TraineeManagement.api.Services
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
+                _logger.LogInformation("Trainee with id {} was not found", Id);
                 return false;
             }
             _appDbContext.Trainees.Remove(trainee);
             await _appDbContext.SaveChangesAsync();
+            _logger.LogInformation("Trainee with id {} deleted successfully", Id);
             return true;
         }
     }

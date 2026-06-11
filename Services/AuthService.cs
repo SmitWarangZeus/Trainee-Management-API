@@ -11,10 +11,13 @@ namespace TraineeManagement.api.Services
 
         private readonly JwtService _jwtService;
 
-        public AuthService(AppDbContext AppDbContext, JwtService jwtService)
+        private readonly ILogger<AuthService> _logger;
+
+        public AuthService(AppDbContext AppDbContext, JwtService jwtService, ILogger<AuthService> logger)
         {
             _appDbContext = AppDbContext;
             _jwtService = jwtService;
+            _logger = logger;
         }
 
         public async Task<LoginResponse> Register(LoginRequest loginUser)
@@ -38,14 +41,17 @@ namespace TraineeManagement.api.Services
             User? user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Username==loginUser.Username);
             if (user==null)
             {
+                _logger.LogInformation("Username {} not found", loginUser.Username);
                 return null;
             }
             bool result = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHash);
             if (result==false)
             {
+                _logger.LogInformation("Password incorrect");
                 return null;
             }
             string token = _jwtService.GenerateToken(user.Id, user.Username, user.Role);
+            _logger.LogInformation("Login successful");
             return new LoginResponse(user, token);
         }
     }
