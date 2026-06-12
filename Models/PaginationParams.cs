@@ -12,7 +12,6 @@ namespace TraineeManagement.api.Models
 
         public string SearchTerm { get; set; } = "";
 
-        [AllowedValues(["Active","Inactive","Completed",null], ErrorMessage = "Invalid status")]
         public string? Status { get; set; }
     }
 }

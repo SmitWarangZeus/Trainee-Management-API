@@ -1,0 +1,42 @@
+Task 2.12: Create Mentor Module 
+Field        | Description 
+Id           | Primary key 
+FirstName    | Mentor first name 
+LastName     | Mentor last name 
+Email        | Mentor email 
+Expertise    | Technical expertise 
+Status       | Active / Inactive 
+CreatedDate  | Auto-generated 
+UpdatedDate  | Auto-generated 
+GET    /api/mentors 
+GET    /api/mentors/{id} 
+POST   /api/mentors 
+PUT    /api/mentors/{id} 
+DELETE /api/mentors/{id} 
+• Create DTOs, validation, service, and controller. 
+• Protect APIs using JWT. 
+• Add migration for Mentor table.
+
+Task 2.13: Create Learning Task Module 
+Field             | Description 
+Id                | Primary key 
+Title             | Task title 
+Description       | Task description 
+ExpectedTechStack | Expected technology stack 
+DueDate           | Due date 
+Status            | Draft / Published / Closed 
+CreatedDate       | Auto-generated 
+UpdatedDate       | Auto-generated 
+GET    /api/learning-tasks 
+GET    /api/learning-tasks/{id} 
+POST   /api/learning-tasks 
+PUT    /api/learning-tasks/{id} 
+DELETE /api/learning-tasks/{id}
+
+Day 4 Deliverables 
+• Mentor CRUD APIs completed. 
+• Learning Task CRUD APIs completed. 
+• DTOs and validation added. 
+• APIs protected using JWT. 
+• MySQL migrations updated. 
+• Swagger/Postman testing completed. 

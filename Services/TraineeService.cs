@@ -33,7 +33,8 @@ namespace TraineeManagement.api.Services
                 query = query.Where(t => t.Status == paginationParams.Status);
             }
             int totalRecords = await query.CountAsync();
-            List<TraineeResponse> trainees = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize).Take(paginationParams.PageSize).Select(t => new TraineeResponse(t)).AsNoTracking().ToListAsync();
+            List<TraineeResponse> trainees = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+            .Take(paginationParams.PageSize).Select(t => new TraineeResponse(t)).AsNoTracking().ToListAsync();
             PagedResponse<TraineeResponse> pagedResponse = new PagedResponse<TraineeResponse>(trainees, paginationParams.PageNumber, paginationParams.PageSize, totalRecords);
             return pagedResponse;
         }

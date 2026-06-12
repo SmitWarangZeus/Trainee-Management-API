@@ -36,7 +36,7 @@ public class MentorController : ControllerBase
     public async Task<IActionResult> CreateAsync(CreateMentorRequest createMentor)
     {
         MentorResponse mentorResponse = await _service.CreateAsync(createMentor);
-        return Created($"api/Mentors/{mentorResponse.Id}", mentorResponse);
+        return Created($"api/mentors/{mentorResponse.Id}", mentorResponse);
     }
 
     [HttpPut("{Id:int}")]
