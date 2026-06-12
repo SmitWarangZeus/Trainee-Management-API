@@ -20,7 +20,7 @@ namespace TraineeManagement.api.Services
             _logger = logger;
         }
 
-        public async Task<LoginResponse> Register(LoginRequest loginUser)
+        public async Task<UserResponse> Register(LoginRequest loginUser)
         {
             User user = new User
             {
@@ -31,10 +31,9 @@ namespace TraineeManagement.api.Services
                 UpdatedDate = DateTime.UtcNow
             };
             user.SetPassword(loginUser.Password);
-            string token = _jwtService.GenerateToken(user.Id, user.Username, user.Role);
             _appDbContext.Users.Add(user);
             await _appDbContext.SaveChangesAsync();
-            return new LoginResponse(user, token);
+            return new UserResponse(user);
         }
 
         public async Task<LoginResponse?> Login(LoginRequest loginUser)

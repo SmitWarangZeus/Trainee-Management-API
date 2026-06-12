@@ -1,16 +1,16 @@
 namespace TraineeManagement.api.Models
 {
-    public class PagedResponse<TraineeResponse>
+    public class PagedResponse<T>
     {
-        public List<TraineeResponse> Data { get; set; }
+        public List<T> Data { get; set; }
 
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
-        
+
         public int TotalRecords { get; set; }
 
-        public PagedResponse(List<TraineeResponse> data, int pageNumber, int pageSize, int totalRecords)
+        public PagedResponse(List<T> data, int pageNumber, int pageSize, int totalRecords)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;

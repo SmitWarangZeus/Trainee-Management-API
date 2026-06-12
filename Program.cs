@@ -19,6 +19,7 @@ var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 builder.Services.AddScoped<ITraineeService, TraineeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IMentorService, MentorService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
