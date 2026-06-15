@@ -1,0 +1,70 @@
+Task 2.14: Create Task Assignment Module 
+Field          | Description 
+Id             | Primary key 
+TraineeId      | Linked trainee 
+MentorId       | Linked mentor 
+LearningTaskId | Linked learning task 
+AssignedDate   | Assignment date 
+DueDate        | Due date 
+Status         | Assigned / InProgress / Submitted / Reviewed / Completed 
+Remarks        | Optional remarks 
+POST /api/task-assignments 
+GET  /api/task-assignments 
+GET  /api/task-assignments/{id} 
+PUT  /api/task-assignments/{id}/status 
+• TraineeId must exist. MentorId must exist. 
+• LearningTaskId must exist. 
+• DueDate should not be before AssignedDate.
+
+Task 2.15: Create Submission Module 
+Field            | Description 
+Id               | Primary key 
+TaskAssignmentId | Linked assignment 
+SubmissionUrl    | GitHub/Drive/submission link 
+Notes            | Trainee notes 
+SubmittedDate    | Submission date 
+Status           | Submitted / Resubmitted 
+POST /api/submissions 
+GET  /api/submissions 
+GET  /api/submissions/{id}
+
+Task 2.16: Create Review Module 
+Field        | Description 
+Id           | Primary key 
+SubmissionId | Linked submission 
+MentorId     | Reviewing mentor 
+Feedback     | Mentor feedback 
+Score        | Optional score 
+ReviewStatus | Accepted / ChangesRequired / Rejected 
+ReviewedDate | Review date 
+POST /api/reviews 
+GET  /api/reviews 
+GET  /api/reviews/{id}
+
+Task 2.17: Add Global Exception Handling Middleware 
+• Create centralized exception handling for unexpected errors. 
+• Return safe, consistent error messages to clients. 
+• Do not expose stack traces or internal exception details in API responses. 
+{ 
+    "message": "An unexpected error occurred. Please try again later."
+} 
+
+Task 2.18: OWASP API Security Basics Review 
+Security                  | Area Expected Practice 
+Authentication            | JWT validation enabled 
+Authorization             | Protected APIs require token 
+Password storage          | Passwords stored as hash only 
+Excessive data exposure   | DTOs used; password hash not returned 
+Injection                 | EF Core used; no unsafe raw SQL 
+Security misconfiguration | CORS restricted to expected origin 
+Sensitive data exposure   | Secrets not hardcoded in controllers 
+Error handling            | Stack traces not returned 
+Logging                   | Passwords and tokens not logged
+
+Day 5 Deliverables 
+• Task Assignment APIs completed. 
+• Submission APIs completed. 
+• Review APIs completed. 
+• Relationships validated. 
+• Global exception handling added. 
+• OWASP API security checklist completed. Final backend demo ready.
