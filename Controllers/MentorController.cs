@@ -28,8 +28,7 @@ public class MentorController : ControllerBase
     [HttpGet("{Id:int}")]
     public async Task<IActionResult> GetByIdAsync(int Id)
     {
-        MentorResponse? mentorResponse = await _service.GetByIdAsync(Id);
-        return mentorResponse==null ? NotFound() : Ok(mentorResponse);
+        return Ok(await _service.GetByIdAsync(Id));
     }
 
     [HttpPost]
@@ -42,8 +41,7 @@ public class MentorController : ControllerBase
     [HttpPut("{Id:int}")]
     public async Task<IActionResult> UpdateAsync(int Id, UpdateMentorRequest updateMentor)
     {
-        MentorResponse? mentorResponse = await _service.UpdateAsync(Id, updateMentor);
-        return mentorResponse==null ? NotFound() : Ok(mentorResponse);
+        return Ok(await _service.UpdateAsync(Id, updateMentor));
     }
 
     [HttpDelete("{Id:int}")]

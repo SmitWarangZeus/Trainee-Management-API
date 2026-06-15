@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
+using TraineeManagement.api.Exceptions;
 
 namespace TraineeManagement.api.Services
 {
@@ -39,13 +40,13 @@ namespace TraineeManagement.api.Services
             return pagedResponse;
         }
 
-        public async Task<MentorResponse?> GetByIdAsync(int Id)
+        public async Task<MentorResponse> GetByIdAsync(int Id)
         {
             Mentor? mentor = await _appDbContext.Mentors.FindAsync(Id);
             if (mentor==null)
             {
                 _logger.LogInformation("Mentor with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Mentor not found");
             }
             MentorResponse mentorResponse = new MentorResponse(mentor);
             _logger.LogInformation("Mentor with id {} found", Id);
@@ -61,13 +62,13 @@ namespace TraineeManagement.api.Services
             return new MentorResponse(mentor);
         }
 
-        public async Task<MentorResponse?> UpdateAsync(int Id, UpdateMentorRequest updateMentor)
+        public async Task<MentorResponse> UpdateAsync(int Id, UpdateMentorRequest updateMentor)
         {
             Mentor? mentor = await _appDbContext.Mentors.FindAsync(Id);
             if (mentor==null)
             {
                 _logger.LogInformation("Mentor with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Mentor not found");
             }
             mentor.FirstName = updateMentor.FirstName;
             mentor.LastName = updateMentor.LastName;

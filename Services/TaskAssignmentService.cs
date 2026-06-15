@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
+using TraineeManagement.api.Exceptions;
 
 namespace TraineeManagement.api.Services
 {
@@ -22,13 +23,13 @@ namespace TraineeManagement.api.Services
             return await _appDbContext.TaskAssignments.Select(t => new TaskAssignmentResponse(t)).AsNoTracking().ToListAsync();
         }
 
-        public async Task<TaskAssignmentResponse?> GetByIdAsync(int Id)
+        public async Task<TaskAssignmentResponse> GetByIdAsync(int Id)
         {
             TaskAssignment? taskAssignment = await _appDbContext.TaskAssignments.FindAsync(Id);
             if (taskAssignment==null)
             {
                 _logger.LogInformation("TaskAssignment with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Task assignment not found");
             }
             TaskAssignmentResponse taskAssignmentResponse = new TaskAssignmentResponse(taskAssignment);
             _logger.LogInformation("TaskAssignment with id {} found", Id);
@@ -41,19 +42,19 @@ namespace TraineeManagement.api.Services
             if (trainee==null)
             {
                 _logger.LogInformation("Trainee with id {} found", createTaskAssignment.TraineeId);
-                return null;
+                throw new NotFoundException("Trainee not found");
             }
             Mentor? mentor = await _appDbContext.Mentors.FindAsync(createTaskAssignment.MentorId);
             if (mentor==null)
             {
                 _logger.LogInformation("Mentor with id {} found", createTaskAssignment.TraineeId);
-                return null;
+                throw new NotFoundException("Mentor not found");
             }
             LearningTask? learningTask = await _appDbContext.LearningTasks.FindAsync(createTaskAssignment.LearningTaskId);
             if (learningTask==null)
             {
                 _logger.LogInformation("LearningTask with id {} found", createTaskAssignment.TraineeId);
-                return null;
+                throw new NotFoundException("Task assignment not found");
             }
             if (createTaskAssignment.DueDate<createTaskAssignment.AssignedDate)
             {
@@ -67,13 +68,13 @@ namespace TraineeManagement.api.Services
             return new TaskAssignmentResponse(taskAssignment);
         }
 
-        public async Task<TaskAssignmentResponse?> UpdateAsync(int Id, UpdateTaskAssignmentRequest updateTaskAssignment)
+        public async Task<TaskAssignmentResponse> UpdateAsync(int Id, UpdateTaskAssignmentRequest updateTaskAssignment)
         {
             TaskAssignment? taskAssignment = await _appDbContext.TaskAssignments.FindAsync(Id);
             if (taskAssignment==null)
             {
                 _logger.LogInformation("TaskAssignment with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Task assignment not found");
             }
             taskAssignment.Status = updateTaskAssignment.Status;
             await _appDbContext.SaveChangesAsync();

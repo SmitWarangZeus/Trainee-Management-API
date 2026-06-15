@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
+using TraineeManagement.api.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +73,9 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -80,6 +84,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

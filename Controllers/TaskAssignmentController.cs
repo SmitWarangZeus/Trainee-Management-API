@@ -27,21 +27,19 @@ public class TaskAssignmentController : ControllerBase
     [HttpGet("{Id:int}")]
     public async Task<IActionResult> GetByIdAsync(int Id)
     {
-        TaskAssignmentResponse? taskAssignmentResponse = await _service.GetByIdAsync(Id);
-        return taskAssignmentResponse==null ? NotFound() : Ok(taskAssignmentResponse);
+        return Ok(await _service.GetByIdAsync(Id));
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync(CreateTaskAssignmentRequest createTaskAssignment)
     {
         TaskAssignmentResponse? taskAssignmentResponse = await _service.CreateAsync(createTaskAssignment);
-        return taskAssignmentResponse==null ? NotFound("Incorrect Id or date") : Ok(taskAssignmentResponse);
+        return taskAssignmentResponse==null ? BadRequest("Due date must be greater than Assigned date") : Created($"/api/task-assignments/{taskAssignmentResponse.Id}", taskAssignmentResponse);
     }
 
     [HttpPut("{Id:int}/status")]
     public async Task<IActionResult> UpdateAsync(int Id, UpdateTaskAssignmentRequest updateTaskAssignment)
     {
-        TaskAssignmentResponse? taskAssignmentResponse = await _service.UpdateAsync(Id, updateTaskAssignment);
-        return taskAssignmentResponse==null ? NotFound() : Ok(taskAssignmentResponse);
+        return Ok(await _service.UpdateAsync(Id, updateTaskAssignment));
     }
 }

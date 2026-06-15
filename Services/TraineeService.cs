@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
+using TraineeManagement.api.Exceptions;
 
 namespace TraineeManagement.api.Services
 {
@@ -39,13 +40,13 @@ namespace TraineeManagement.api.Services
             return pagedResponse;
         }
 
-        public async Task<TraineeResponse?> GetByIdAsync(int Id)
+        public async Task<TraineeResponse> GetByIdAsync(int Id)
         {
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 _logger.LogInformation("Trainee with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Trainee not found");
             }
             TraineeResponse traineeResponse = new TraineeResponse(trainee);
             _logger.LogInformation("Trainee with id {} found", Id);
@@ -61,13 +62,13 @@ namespace TraineeManagement.api.Services
             return new TraineeResponse(trainee);
         }
 
-        public async Task<TraineeResponse?> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
+        public async Task<TraineeResponse> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
         {
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
                 _logger.LogInformation("Trainee with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Trainee not found");
             }
             trainee.FirstName = updateTrainee.FirstName;
             trainee.LastName = updateTrainee.LastName;

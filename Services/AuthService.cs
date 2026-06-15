@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
+using TraineeManagement.api.Exceptions;
 
 namespace TraineeManagement.api.Services
 {
@@ -42,7 +43,7 @@ namespace TraineeManagement.api.Services
             if (user==null)
             {
                 _logger.LogInformation("Username {} not found", loginUser.Username);
-                return null;
+                throw new NotFoundException("User not found");
             }
             bool result = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHash);
             if (result==false)

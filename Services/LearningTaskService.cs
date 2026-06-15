@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
+using TraineeManagement.api.Exceptions;
 
 namespace TraineeManagement.api.Services
 {
@@ -38,13 +39,13 @@ namespace TraineeManagement.api.Services
             return pagedResponse;
         }
 
-        public async Task<LearningTaskResponse?> GetByIdAsync(int Id)
+        public async Task<LearningTaskResponse> GetByIdAsync(int Id)
         {
             LearningTask? learningTask = await _appDbContext.LearningTasks.FindAsync(Id);
             if (learningTask==null)
             {
                 _logger.LogInformation("LearningTask with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Learning Task not found");
             }
             LearningTaskResponse learningTaskResponse = new LearningTaskResponse(learningTask);
             _logger.LogInformation("LearningTask with id {} found", Id);
@@ -60,13 +61,13 @@ namespace TraineeManagement.api.Services
             return new LearningTaskResponse(learningTask);
         }
 
-        public async Task<LearningTaskResponse?> UpdateAsync(int Id, UpdateLearningTaskRequest updateLearningTask)
+        public async Task<LearningTaskResponse> UpdateAsync(int Id, UpdateLearningTaskRequest updateLearningTask)
         {
             LearningTask? learningTask = await _appDbContext.LearningTasks.FindAsync(Id);
             if (learningTask==null)
             {
                 _logger.LogInformation("LearningTask with id {} was not found", Id);
-                return null;
+                throw new NotFoundException("Learning Task not found");
             }
             learningTask.Title = updateLearningTask.Title;
             learningTask.Description = updateLearningTask.Description;

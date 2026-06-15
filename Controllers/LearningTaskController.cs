@@ -28,8 +28,7 @@ public class LearningTaskController : ControllerBase
     [HttpGet("{Id:int}")]
     public async Task<IActionResult> GetByIdAsync(int Id)
     {
-        LearningTaskResponse? learningTaskResponse = await _service.GetByIdAsync(Id);
-        return learningTaskResponse==null ? NotFound() : Ok(learningTaskResponse);
+        return Ok(await _service.GetByIdAsync(Id));
     }
 
     [HttpPost]
@@ -42,8 +41,7 @@ public class LearningTaskController : ControllerBase
     [HttpPut("{Id:int}")]
     public async Task<IActionResult> UpdateAsync(int Id, UpdateLearningTaskRequest updateLearningTask)
     {
-        LearningTaskResponse? learningTaskResponse = await _service.UpdateAsync(Id, updateLearningTask);
-        return learningTaskResponse==null ? NotFound() : Ok(learningTaskResponse);
+        return Ok(await _service.UpdateAsync(Id, updateLearningTask));
     }
 
     [HttpDelete("{Id:int}")]
