@@ -87,7 +87,7 @@ namespace TraineeManagement.api.Services
             if (mentor==null)
             {
                 _logger.LogInformation("Mentor with id {} was not found", Id);
-                return false;
+                throw new NotFoundException("Mentor not found");
             }
             _appDbContext.Mentors.Remove(mentor);
             await _appDbContext.SaveChangesAsync();

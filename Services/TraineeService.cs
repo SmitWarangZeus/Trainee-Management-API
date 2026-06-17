@@ -87,7 +87,7 @@ namespace TraineeManagement.api.Services
             if (trainee==null)
             {
                 _logger.LogInformation("Trainee with id {} was not found", Id);
-                return false;
+                throw new NotFoundException("Trainee not found");
             }
             _appDbContext.Trainees.Remove(trainee);
             await _appDbContext.SaveChangesAsync();

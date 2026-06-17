@@ -85,7 +85,7 @@ namespace TraineeManagement.api.Services
             if (learningTask==null)
             {
                 _logger.LogInformation("LearningTask with id {} was not found", Id);
-                return false;
+                throw new NotFoundException("LearningTask not found");
             }
             _appDbContext.LearningTasks.Remove(learningTask);
             await _appDbContext.SaveChangesAsync();

@@ -9,7 +9,7 @@ namespace TraineeManagement.api.DTOs
         public string Title { get; set; } = null!;
 
         [Required(ErrorMessage = "Description is required")]
-        [StringLength(200, ErrorMessage = "Max length 50 characters")]
+        [StringLength(200, ErrorMessage = "Max length 200 characters")]
         public string Description { get; set; } = null!;
 
         [Required(ErrorMessage = "ExpectedTechStack is required")]
