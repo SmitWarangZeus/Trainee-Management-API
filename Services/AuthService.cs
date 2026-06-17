@@ -49,7 +49,7 @@ namespace TraineeManagement.api.Services
             if (result==false)
             {
                 _logger.LogInformation("Password incorrect");
-                return null;
+                throw new UnAuthorizedException("Incorrect username or password");
             }
             string token = _jwtService.GenerateToken(user.Id, user.Username, user.Role);
             _logger.LogInformation("Login successful");

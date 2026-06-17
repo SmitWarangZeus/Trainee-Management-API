@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
         return Ok(userResponse);
     }
 
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginUser)
     {
         LoginResponse? loginResponse = await _service.Login(loginUser);
