@@ -14,7 +14,6 @@ namespace TraineeManagement.api.DTOs
         [StringLength(200, ErrorMessage = "Max length 200 characters")]
         public string Feedback { get; set; } = null!;
 
-        [Required(ErrorMessage = "Score is required")]
         public int Score { get; set; }
 
         [Required(ErrorMessage = "ReviewStatus is required")]

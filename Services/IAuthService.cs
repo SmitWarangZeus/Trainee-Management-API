@@ -6,6 +6,6 @@ namespace TraineeManagement.api.Services
     {
         Task<UserResponse> Register(LoginRequest loginUser);
 
-        Task<LoginResponse?> Login(LoginRequest loginUser);
+        Task<LoginResponse> Login(LoginRequest loginUser);
     }
 }

@@ -37,13 +37,13 @@ namespace TraineeManagement.api.Services
             return new UserResponse(user);
         }
 
-        public async Task<LoginResponse?> Login(LoginRequest loginUser)
+        public async Task<LoginResponse> Login(LoginRequest loginUser)
         {
             User? user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Username==loginUser.Username);
             if (user==null)
             {
                 _logger.LogInformation("Username {} not found", loginUser.Username);
-                throw new NotFoundException("User not found");
+                throw new UnAuthorizedException("Incorrect username or password");
             }
             bool result = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHash);
             if (result==false)

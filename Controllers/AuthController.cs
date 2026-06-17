@@ -25,7 +25,6 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginUser)
     {
-        LoginResponse? loginResponse = await _service.Login(loginUser);
-        return (loginResponse==null) ? Unauthorized("Incorrect username or password") : Ok(loginResponse);
+        return Ok(await _service.Login(loginUser));
     }
 }
