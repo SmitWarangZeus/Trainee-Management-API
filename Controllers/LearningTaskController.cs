@@ -19,7 +19,7 @@ public class LearningTaskController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams paginationParams)
+    public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search")] PaginationParams paginationParams)
     {
         PagedResponse<LearningTaskResponse> learningTaskResponses = await _service.GetAllAsync(paginationParams);
         return Ok(learningTaskResponses);

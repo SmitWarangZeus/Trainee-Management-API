@@ -19,7 +19,7 @@ public class MentorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams paginationParams)
+    public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search")] PaginationParams paginationParams)
     {
         PagedResponse<MentorResponse> mentorResponses = await _service.GetAllAsync(paginationParams);
         return Ok(mentorResponses);
