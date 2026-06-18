@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TraineeManagement.api.Data;
 
 namespace TraineeManagement.api.DTOs
 {
@@ -7,7 +8,7 @@ namespace TraineeManagement.api.DTOs
         [Required(ErrorMessage = "SubmissionId is required")]
         public int SubmissionId { get; set; }
 
-        [Required(ErrorMessage = "MentorId is required")]
+        [Required(ErrorMessage = Constants.MENTORID_REQUIRED)]
         public int MentorId { get; set; }
 
         [Required(ErrorMessage = "Feedback is required")]

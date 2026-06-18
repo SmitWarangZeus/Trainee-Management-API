@@ -41,7 +41,7 @@ namespace TraineeManagement.api.Services
             TaskAssignment? taskAssignment = await _appDbContext.TaskAssignments.FindAsync(createSubmission.TaskAssignmentId);
             if (taskAssignment==null)
             {
-                _logger.LogInformation("Task assignment with id {} found", createSubmission.TaskAssignmentId);
+                _logger.LogInformation("Task assignment with id {} was not found", createSubmission.TaskAssignmentId);
                 throw new NotFoundException("Task assignment not found");
             }
             Submission submission = new Submission(createSubmission);

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TraineeManagement.api.Data;
 
 namespace TraineeManagement.api.DTOs
 {
@@ -17,8 +18,8 @@ namespace TraineeManagement.api.DTOs
         [Required(ErrorMessage = "Submitted date is required")]
         public DateTime SubmittedDate { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [AllowedValues(["Submitted","Resubmitted"], ErrorMessage = "Invalid status")]
+        [Required(ErrorMessage = Constants.STATUS_REQUIRED)]
+        [AllowedValues([Constants.STATUS_SUBMITTED,"Resubmitted"], ErrorMessage = Constants.STATUS_INVALID)]
         public string Status { get; set; } = null!;
     }
 }

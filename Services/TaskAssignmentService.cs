@@ -41,19 +41,19 @@ namespace TraineeManagement.api.Services
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(createTaskAssignment.TraineeId);
             if (trainee==null)
             {
-                _logger.LogInformation("Trainee with id {} found", createTaskAssignment.TraineeId);
+                _logger.LogInformation("Trainee with id {} was not found", createTaskAssignment.TraineeId);
                 throw new NotFoundException("Trainee not found");
             }
             Mentor? mentor = await _appDbContext.Mentors.FindAsync(createTaskAssignment.MentorId);
             if (mentor==null)
             {
-                _logger.LogInformation("Mentor with id {} found", createTaskAssignment.TraineeId);
+                _logger.LogInformation("Mentor with id {} was not found", createTaskAssignment.TraineeId);
                 throw new NotFoundException("Mentor not found");
             }
             LearningTask? learningTask = await _appDbContext.LearningTasks.FindAsync(createTaskAssignment.LearningTaskId);
             if (learningTask==null)
             {
-                _logger.LogInformation("LearningTask with id {} found", createTaskAssignment.TraineeId);
+                _logger.LogInformation("LearningTask with id {} was not found", createTaskAssignment.TraineeId);
                 throw new NotFoundException("Task assignment not found");
             }
             if (createTaskAssignment.DueDate<createTaskAssignment.AssignedDate)

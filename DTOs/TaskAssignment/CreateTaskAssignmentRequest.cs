@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TraineeManagement.api.Data;
 
 namespace TraineeManagement.api.DTOs
 {
@@ -7,7 +8,7 @@ namespace TraineeManagement.api.DTOs
         [Required(ErrorMessage = "TraineeId is required")]
         public int TraineeId { get; set; }
 
-        [Required(ErrorMessage = "MentorId is required")]
+        [Required(ErrorMessage = Constants.MENTORID_REQUIRED)]
         public int MentorId { get; set; }
 
         [Required(ErrorMessage = "LearningTaskId is required")]
@@ -19,8 +20,8 @@ namespace TraineeManagement.api.DTOs
         [Required(ErrorMessage = "Due date is required")]
         public DateTime DueDate { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [AllowedValues(["Assigned","InProgress","Submitted","Reviewed","Completed"], ErrorMessage = "Invalid status")]
+        [Required(ErrorMessage = Constants.STATUS_REQUIRED)]
+        [AllowedValues([Constants.STATUS_ASSIGNED,Constants.STATUS_INPROGRESS,Constants.STATUS_SUBMITTED,Constants.STATUS_REVIEWED,Constants.STATUS_COMPLETED], ErrorMessage = Constants.STATUS_INVALID)]
         public string Status { get; set; } = null!;
 
         [StringLength(50, ErrorMessage = "Max length 50 characters")]

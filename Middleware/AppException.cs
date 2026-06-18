@@ -29,7 +29,6 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
         };
 
         httpContext.Response.StatusCode = statusCode;
-        // httpContext.Response.ContentType = "application/problem+json";
 
         object responseBody;
 

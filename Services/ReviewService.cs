@@ -41,13 +41,13 @@ namespace TraineeManagement.api.Services
             Submission? submission = await _appDbContext.Submissions.FindAsync(createReview.SubmissionId);
             if (submission==null)
             {
-                _logger.LogInformation("Submission with id {} found", createReview.SubmissionId);
+                _logger.LogInformation("Submission with id {} was not found", createReview.SubmissionId);
                 throw new NotFoundException("Submission not found");
             }
             Mentor? mentor = await _appDbContext.Mentors.FindAsync(createReview.MentorId);
             if (mentor==null)
             {
-                _logger.LogInformation("Mentor with id {} found", createReview.MentorId);
+                _logger.LogInformation("Mentor with id {} was not found", createReview.MentorId);
                 throw new NotFoundException("Mentor not found");
             }
             Review review = new Review(createReview);

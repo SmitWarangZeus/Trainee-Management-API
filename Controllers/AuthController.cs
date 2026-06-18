@@ -8,14 +8,14 @@ namespace TraineeManagement.api.Controllers;
 [Route("/api/auth")]
 public class AuthController : ControllerBase
 {
-    public readonly IAuthService _service;
+    private readonly IAuthService _service;
 
     public AuthController(IAuthService service)
     {
         _service = service;
     }
 
-    [HttpPost("/register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(LoginRequest loginUser)
     {
         UserResponse userResponse = await _service.Register(loginUser);
