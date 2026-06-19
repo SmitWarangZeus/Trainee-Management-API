@@ -25,6 +25,7 @@ builder.Services.AddScoped<ILearningTaskService, LearningTaskService>();
 builder.Services.AddScoped<TaskAssignmentService>();
 builder.Services.AddScoped<SubmissionService>();
 builder.Services.AddScoped<ReviewService>();
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
