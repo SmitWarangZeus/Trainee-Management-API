@@ -12,10 +12,13 @@ namespace TraineeManagement.api.Services
 
         private readonly ILogger<SubmissionService> _logger;
 
-        public SubmissionService(AppDbContext AppDbContext, ILogger<SubmissionService> logger)
+        private readonly RedisCacheService _cache;
+
+        public SubmissionService(AppDbContext AppDbContext, ILogger<SubmissionService> logger, RedisCacheService cache)
         {
             _appDbContext = AppDbContext;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<List<SubmissionResponse>> GetAllAsync()
@@ -25,6 +28,13 @@ namespace TraineeManagement.api.Services
 
         public async Task<SubmissionResponse> GetByIdAsync(int Id)
         {
+            string cacheKey = $"submission:{Id}";
+            SubmissionResponse? cachedData = await _cache.GetKeyAsync<SubmissionResponse>(cacheKey);
+            if (cachedData!=null)
+            {
+                _logger.LogInformation("Cached submission with id {} was not found", Id);
+                return cachedData;
+            }
             Submission? submission = await _appDbContext.Submissions.FindAsync(Id);
             if (submission==null)
             {
@@ -32,6 +42,7 @@ namespace TraineeManagement.api.Services
                 throw new NotFoundException("Task assignment not found");
             }
             SubmissionResponse submissionResponse = new SubmissionResponse(submission);
+            await _cache.SetKeyAsync(cacheKey, submissionResponse);
             _logger.LogInformation("Submission with id {} found", Id);
             return submissionResponse;
         }

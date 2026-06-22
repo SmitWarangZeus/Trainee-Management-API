@@ -26,6 +26,7 @@ builder.Services.AddScoped<TaskAssignmentService>();
 builder.Services.AddScoped<SubmissionService>();
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+builder.Services.AddScoped<RedisCacheService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
@@ -78,6 +79,12 @@ builder.Services.AddSwaggerGen(opt =>
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "redis_cache_";
+});
 
 var app = builder.Build();
 

@@ -3,6 +3,7 @@ using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
 using TraineeManagement.api.Exceptions;
+using System.Text.Json;
 
 namespace TraineeManagement.api.Services
 {
@@ -12,10 +13,13 @@ namespace TraineeManagement.api.Services
 
         private readonly ILogger<TaskAssignmentService> _logger;
 
-        public TaskAssignmentService(AppDbContext AppDbContext, ILogger<TaskAssignmentService> logger)
+        private readonly RedisCacheService _cache;
+
+        public TaskAssignmentService(AppDbContext AppDbContext, ILogger<TaskAssignmentService> logger, RedisCacheService cache)
         {
             _appDbContext = AppDbContext;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<List<TaskAssignmentResponse>> GetAllAsync()
@@ -25,6 +29,13 @@ namespace TraineeManagement.api.Services
 
         public async Task<TaskAssignmentResponse> GetByIdAsync(int Id)
         {
+            string cacheKey = $"taskAssignment:{Id}";
+            TaskAssignmentResponse? cachedData = await _cache.GetKeyAsync<TaskAssignmentResponse>(cacheKey);
+            if (cachedData!=null)
+            {
+                _logger.LogInformation("Cached trainee with id {} was not found", Id);
+                return cachedData;
+            }
             TaskAssignment? taskAssignment = await _appDbContext.TaskAssignments.FindAsync(Id);
             if (taskAssignment==null)
             {
@@ -32,6 +43,7 @@ namespace TraineeManagement.api.Services
                 throw new NotFoundException("Task assignment not found");
             }
             TaskAssignmentResponse taskAssignmentResponse = new TaskAssignmentResponse(taskAssignment);
+            await _cache.SetKeyAsync(cacheKey, taskAssignmentResponse);
             _logger.LogInformation("TaskAssignment with id {} found", Id);
             return taskAssignmentResponse;
         }
@@ -78,6 +90,17 @@ namespace TraineeManagement.api.Services
             }
             taskAssignment.Status = updateTaskAssignment.Status;
             await _appDbContext.SaveChangesAsync();
+
+            string cacheKey = $"taskAssignment:{Id}";
+            TaskAssignmentResponse? cachedData = await _cache.GetKeyAsync<TaskAssignmentResponse>(cacheKey);
+            if (cachedData!=null)
+            {
+                _logger.LogInformation("Cached trainee with id {} found", Id);
+                TaskAssignmentResponse taskAssignmentResponse = new TaskAssignmentResponse(taskAssignment);
+                string serialized = JsonSerializer.Serialize(taskAssignmentResponse);
+                await _cache.SetKeyAsync(cacheKey, serialized);
+            }
+            
             _logger.LogInformation("TaskAssignment with id {} updated successfully", Id);
             return new TaskAssignmentResponse(taskAssignment);
         }

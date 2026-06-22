@@ -3,6 +3,8 @@ using TraineeManagement.api.DTOs;
 using TraineeManagement.api.Models;
 using TraineeManagement.api.Data;
 using TraineeManagement.api.Exceptions;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace TraineeManagement.api.Services
 {
@@ -12,10 +14,13 @@ namespace TraineeManagement.api.Services
 
         private readonly ILogger<TraineeService> _logger;
 
-        public TraineeService(AppDbContext AppDbContext, ILogger<TraineeService> logger)
+        private readonly RedisCacheService _cache;
+
+        public TraineeService(AppDbContext AppDbContext, ILogger<TraineeService> logger, RedisCacheService cache)
         {
             _appDbContext = AppDbContext;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<PagedResponse<TraineeResponse>> GetAllAsync(PaginationParams paginationParams)
@@ -42,6 +47,13 @@ namespace TraineeManagement.api.Services
 
         public async Task<TraineeResponse> GetByIdAsync(int Id)
         {
+            string cacheKey = $"trainee:{Id}";
+            TraineeResponse? cachedData = await _cache.GetKeyAsync<TraineeResponse>(cacheKey);
+            if (cachedData!=null)
+            {
+                _logger.LogInformation("Cached trainee with id {} found", Id);
+                return cachedData;
+            }
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
@@ -49,6 +61,7 @@ namespace TraineeManagement.api.Services
                 throw new NotFoundException("Trainee not found");
             }
             TraineeResponse traineeResponse = new TraineeResponse(trainee);
+            await _cache.SetKeyAsync(cacheKey, traineeResponse);
             _logger.LogInformation("Trainee with id {} found", Id);
             return traineeResponse;
         }
@@ -77,6 +90,17 @@ namespace TraineeManagement.api.Services
             trainee.Status = updateTrainee.Status;
             trainee.UpdatedDate = DateTime.UtcNow;
             await _appDbContext.SaveChangesAsync();
+
+            string cacheKey = $"trainee:{Id}";
+            TraineeResponse? cachedData = await _cache.GetKeyAsync<TraineeResponse>(cacheKey);
+            if (cachedData!=null)
+            {
+                _logger.LogInformation("Cached trainee with id {} found", Id);
+                TraineeResponse traineeResponse = new TraineeResponse(trainee);
+                string serialized = JsonSerializer.Serialize(traineeResponse);
+                await _cache.SetKeyAsync(cacheKey, serialized);
+            }
+
             _logger.LogInformation("Trainee with id {} updated successfully", Id);
             return new TraineeResponse(trainee);
         }
@@ -91,6 +115,8 @@ namespace TraineeManagement.api.Services
             }
             _appDbContext.Trainees.Remove(trainee);
             await _appDbContext.SaveChangesAsync();
+            string cacheKey = $"trainee:{Id}";
+            await _cache.DeleteKeyAsync(cacheKey);
             _logger.LogInformation("Trainee with id {} deleted successfully", Id);
             return true;
         }
