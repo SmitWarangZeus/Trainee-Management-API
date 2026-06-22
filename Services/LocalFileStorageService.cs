@@ -14,7 +14,7 @@ namespace TraineeManagement.api.Services
 
         private readonly AppDbContext _appDbContext;
 
-        private readonly string[] validExtensions = ["pdf", "xlsx", "docx", "txt"];
+        private readonly string[] validExtensions = [".pdf", ".xlsx", ".docx", ".txt"];
 
         private readonly long maxFileSize = 10*1024*1024;
 
