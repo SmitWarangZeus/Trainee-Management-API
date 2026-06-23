@@ -18,13 +18,16 @@ namespace TraineeManagement.api.Services
 
         private readonly long maxFileSize = 10*1024*1024;
 
-        public LocalFileStorageService(AppDbContext appDbContext, IConfiguration config)
+        private readonly IMessageProducer _messageProducer;
+
+        public LocalFileStorageService(AppDbContext appDbContext, IConfiguration config, IMessageProducer messageProducer)
         {
             _appDbContext = appDbContext;
             _config = config;
             var baseDirectory = _config.GetSection("StorageRoot");
             _baseDirectory = Path.GetFullPath(baseDirectory["StoragePath"]!);
             Directory.CreateDirectory(_baseDirectory);
+            _messageProducer = messageProducer;
         }
 
         public async Task<SubmissionFileResponse> SaveAsync(int SubmissionId, int userId, CreateSubmissionFileRequest createSubmissionFileRequest)
@@ -70,6 +73,17 @@ namespace TraineeManagement.api.Services
 
             await using FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize : 4096, useAsync : true);
             await stream.CopyToAsync(fileStream);
+
+            SubmissionProcessingRequest request = new SubmissionProcessingRequest
+            {
+                MessageId = Guid.NewGuid().ToString("N"),
+                CorrelationId = Guid.NewGuid().ToString("N"),
+                SubmissionId = SubmissionId,
+                FileId = metadata.Id,
+                RequestAt = DateTime.UtcNow,
+                ContractVersion = "1.0.0"
+            };
+            _messageProducer.SendMessage(request);
 
             return new SubmissionFileResponse(metadata);
         }
