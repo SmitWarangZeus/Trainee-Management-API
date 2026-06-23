@@ -1,0 +1,26 @@
+Objective: Improve read performance without making Redis the source of truth. 
+
+Task 3.5: Run and configure Redis 
+• Add Redis to the existing Docker Compose environment. 
+• Configure ASP.NET Core distributed caching using Microsoft.Extensions.Caching.StackExchangeRedis. 
+• Store the Redis connection details in configuration or environment variables. 
+• Verify connectivity without exposing credentials in logs. 
+
+Task 3.6: Implement cache-aside for read APIs 
+• Cache selected trainee, task-assignment, and submission-summary responses. 
+• On a cache miss, read from MySQL, serialize the response, store it with a TTL, and return it. 
+• Use a predictable key convention such as trainee:{id} or submission-summary:{id}. 
+• Do not cache password hashes, JWTs, uploaded content, or authorization decisions. 
+
+Task 3.7: Implement cache invalidation 
+• Remove or refresh related keys after create, update, delete, submission upload, and processing-status changes. 
+• Document which write operation invalidates each key. 
+• Demonstrate that an update is reflected immediately and stale data is not returned. 
+
+Task 3.8: Handle Redis failure safely 
+• Treat cache failure as a performance degradation, not as loss of the core API. 
+• Log cache errors and fall back to MySQL where appropriate. 
+• Do not hide database failures by serving indefinitely stale cache data. 
+
+Day 2 submission: Redis configuration, cache service, hit/miss demonstration, invalidation tests, and evidence of 
+database fallback when Redis is unavailable.

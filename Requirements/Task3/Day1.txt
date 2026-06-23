@@ -1,0 +1,31 @@
+Objective: Add secure file upload and download support without coupling business logic to local disk storage. 
+
+Task 3.1: Create a file-storage abstraction 
+• Create IFileStorageService with SaveAsync, OpenReadAsync, ExistsAsync, and DeleteAsync operations. 
+• Implement LocalFileStorageService for the training environment. 
+• Read the storage root from configuration; do not hardcode machine-specific paths. 
+• Generate server-side storage names. Never use the uploaded file name as the physical file name. 
+Deliverable: Storage interface, local implementation, configuration, and dependency-injection registration. 
+
+Task 3.2: Create file metadata and upload API 
+• Create SubmissionFile metadata linked to TaskAssignment or Submission. 
+• Store original file name, generated storage name, content type, size, checksum, uploaded-by user, and 
+timestamps in MySQL. 
+• Create POST /api/submissions/{submissionId}/files using multipart/form-data. 
+• Reject empty files, files above the configured limit, disallowed extensions, and invalid ownership or authorization. 
+Expected response: Return 201 Created with file identifier and metadata. Do not expose the physical storage path. 
+
+Task 3.3: Create download and delete APIs 
+• Create GET /api/submission-files/{id}/download. 
+• Authorize access before opening the file. 
+• Return 404 when metadata or physical content does not exist. 
+• Create DELETE /api/submission-files/{id} and keep database/file operations consistent. 
+
+Task 3.4: Apply file-security controls 
+• Validate extension and declared content type; do not rely on the client-provided file name. 
+• Prevent path traversal by never combining a client file name directly with a storage path. 
+• Configure upload-size limits and return a clear 413 or validation response. 
+• Log metadata and result, but never log file contents or secrets. 
+
+Day 1 submission: Working upload/download/delete flow, migration, Swagger/Postman evidence, and at least five 
+negative validation tests.

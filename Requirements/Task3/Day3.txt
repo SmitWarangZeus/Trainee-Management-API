@@ -1,0 +1,28 @@
+Objective: Move submission processing out of the request path by publishing durable work messages. 
+
+Task 3.9: Run and configure RabbitMQ 
+• Add RabbitMQ with the management plugin to Docker Compose. 
+• Read host, port, virtual host, username, and password from configuration. 
+• Use a durable queue named submission-processing. 
+• Use persistent messages for work that must survive a broker restart. 
+
+Task 3.10: Define a versioned message contract 
+• Create SubmissionProcessingRequested with MessageId, CorrelationId, SubmissionId, FileId, RequestedAt, and 
+ContractVersion. 
+• Do not send passwords, tokens, physical file paths, or unnecessary user data. 
+• Keep the contract independent of EF Core entity classes. 
+
+Task 3.11: Publish messages after a valid submission 
+• Publish only after database validation and file metadata persistence succeeds. 
+• Return 202 Accepted with a tracking identifier for asynchronous work. 
+• Log the message ID, correlation ID, submission ID, and publish result. 
+• Handle broker unavailability and avoid falsely reporting that work was queued. 
+
+Task 3.12: Create a basic consumer 
+• Create a separate Worker Service project. 
+• Consume one message at a time initially using an appropriate prefetch value. 
+• Acknowledge only after processing and status persistence succeed. 
+• Negatively acknowledge or route failed work according to the retry design. 
+
+Day 3 submission: RabbitMQ setup, message contract, publisher, consumer skeleton, management-console 
+evidence, and restart/persistence test.
