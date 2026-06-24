@@ -85,6 +85,14 @@ namespace TraineeManagement.api.Services
             };
             _messageProducer.SendMessage(request);
 
+            ProcessingJob processingJob = new ProcessingJob
+            {
+                CorrelationId = request.CorrelationId,
+                Status = "Queued"
+            };
+            await _appDbContext.ProcessingJobs.AddAsync(processingJob);
+            await _appDbContext.SaveChangesAsync();
+
             return new SubmissionFileResponse(metadata);
         }
 

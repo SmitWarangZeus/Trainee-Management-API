@@ -28,6 +28,7 @@ builder.Services.AddScoped<SubmissionService>();
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddScoped<RedisCacheService>();
+builder.Services.AddScoped<ProcessingJobService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString));
