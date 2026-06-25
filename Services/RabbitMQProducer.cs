@@ -14,6 +14,12 @@ public class RabbitMQProducer : IMessageProducer, IDisposable
 
     private readonly IConfiguration _config;
 
+    private const string DlxExchange = "submissions.dlx";
+
+    private const string DlqQueue = "submissions.dlq";
+
+    private const string DlxRoutingKey = "submission.failed";
+
     public RabbitMQProducer(IConfiguration config)
     {
         _config = config;
@@ -28,12 +34,23 @@ public class RabbitMQProducer : IMessageProducer, IDisposable
 
         _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
         _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
-
-        _channel.QueueDeclareAsync(queue: QueueName, durable: true, exclusive: false, autoDelete: false).GetAwaiter().GetResult();
     }
 
-    public void SendMessage<T>(T message)
+    public async void SendMessage<T>(T message)
     {
+        await _channel.ExchangeDeclareAsync(QueueName, ExchangeType.Topic, durable: true);
+        await _channel.ExchangeDeclareAsync(DlxExchange, ExchangeType.Headers, durable: true);
+
+        IDictionary<string, object?> queueArguments = new Dictionary<string, object?>()
+        {
+            {"x-dead-letter-exchange", DlxExchange},
+            {"x-dead-letter-routing-key", DlxRoutingKey}
+        };
+
+        await _channel.QueueDeclareAsync(QueueName, durable: true, autoDelete: false, exclusive: false, arguments: queueArguments);
+        await _channel.QueueDeclareAsync(DlqQueue, durable: true, exclusive: false, autoDelete: false);
+        await _channel.QueueBindAsync(DlqQueue, DlxExchange, routingKey: DlxRoutingKey);
+
         string jsonString = JsonSerializer.Serialize(message);
         byte[] body = Encoding.UTF8.GetBytes(jsonString);
 
