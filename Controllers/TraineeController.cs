@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Authorize]
+// [Authorize]
 [Route("/api/trainees")]
 public class TraineeController : ControllerBase
 {
