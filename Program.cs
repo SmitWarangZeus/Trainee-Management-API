@@ -6,11 +6,26 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
 using TraineeManagement.api.Handlers;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 ?? throw new InvalidOperationException("Connection string not found");
+string redisConn = builder.Configuration.GetConnectionString("Redis") 
+?? throw new InvalidOperationException("Redis connection string not configured.");
+
+var factory = new ConnectionFactory
+{
+    HostName = builder.Configuration["RabbitMQ:HostName"]!,
+    UserName = builder.Configuration["RabbitMQ:Username"]!,
+    Password = builder.Configuration["RabbitMQ:Password"]!
+};
+
+builder.Services.AddHealthChecks()
+    .AddMySql(connectionString, name: "mysql")
+    .AddRedis(redisConn, name: "redis")
+    .AddRabbitMQ(name: "rabbitmq");
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
@@ -88,6 +103,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
+builder.Services.AddSingleton(await factory.CreateConnectionAsync());
 
 var app = builder.Build();
 

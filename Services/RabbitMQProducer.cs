@@ -12,27 +12,15 @@ public class RabbitMQProducer : IMessageProducer, IDisposable
 
     private const string QueueName = "file_processing_queue";
 
-    private readonly IConfiguration _config;
-
     private const string DlxExchange = "submissions.dlx";
 
     private const string DlqQueue = "submissions.dlq";
 
     private const string DlxRoutingKey = "submission.failed";
 
-    public RabbitMQProducer(IConfiguration config)
+    public RabbitMQProducer(IConnection connection)
     {
-        _config = config;
-        var rabbitmq = _config.GetSection("RabbitMQ");
-        var factory = new ConnectionFactory
-        {
-            HostName = rabbitmq["HostName"]!.ToString(),
-            Port = 5672,
-            UserName = rabbitmq["Username"]!.ToString(),
-            Password = rabbitmq["Password"]!.ToString()
-        };
-
-        _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
+        _connection = connection;
         _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
     }
 
