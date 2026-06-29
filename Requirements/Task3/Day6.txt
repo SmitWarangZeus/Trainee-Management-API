@@ -1,0 +1,22 @@
+Objective: Make the distributed workflow diagnosable and demonstrate the complete path. 
+
+Task 3.21: Add structured and correlated logging 
+• Use structured log properties instead of concatenated text. 
+• Carry CorrelationId from the incoming API request into the database job, RabbitMQ message, worker, and internal 
+HTTP request. 
+• Log state transitions, cache hit/miss, publish/consume result, retry attempt, and dependency failure. 
+• Never log passwords, JWTs, connection strings, or file contents. 
+
+Task 3.22: Add health checks 
+• Expose liveness and readiness endpoints. 
+• Check MySQL, Redis, RabbitMQ, and the internal HTTP service where practical. 
+• Do not expose sensitive dependency details in public health responses. 
+
+Task 3.23: Complete Docker Compose integration 
+• Run API, worker, internal service, MySQL, Redis, and RabbitMQ as one local stack. 
+• Use service names for container-to-container connections rather than localhost. 
+• Add dependency health checks and suitable restart policies. 
+• Keep credentials in environment configuration rather than committed source files. 
+
+Day 6 submission: Running Docker Compose stack, health results, correlated logs, and complete Postman/Swagger 
+workflow evidence.
