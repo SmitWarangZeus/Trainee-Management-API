@@ -10,7 +10,7 @@ namespace TraineeManagement.api.Models
         [Range(1, int.MaxValue, ErrorMessage = "Page size must be greater than 0")]
         public int PageSize { get; set; } = 10;
 
-        public string SearchTerm { get; set; } = "";
+        public string SearchTerm { get; set; } = null!;
 
         public string? Status { get; set; }
     }

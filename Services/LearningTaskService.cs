@@ -54,6 +54,11 @@ namespace TraineeManagement.api.Services
 
         public async Task<LearningTaskResponse> CreateAsync(CreateLearningTaskRequest createLearningTask)
         {
+            if (createLearningTask.DueDate<DateTime.UtcNow)
+            {
+                _logger.LogInformation("Due date should be greater than current date");
+                throw new BadRequestException("Due date must be greater than Assigned date");
+            }
             LearningTask learningTask = new LearningTask(createLearningTask);
             _appDbContext.LearningTasks.Add(learningTask);
             await _appDbContext.SaveChangesAsync();
@@ -68,6 +73,11 @@ namespace TraineeManagement.api.Services
             {
                 _logger.LogInformation("LearningTask with id {} was not found", Id);
                 throw new NotFoundException("Learning Task not found");
+            }
+            if (updateLearningTask.DueDate<DateTime.UtcNow)
+            {
+                _logger.LogInformation("Due date should be greater than current date");
+                throw new BadRequestException("Due date must be greater than Assigned date");
             }
             learningTask.Title = updateLearningTask.Title;
             learningTask.Description = updateLearningTask.Description;

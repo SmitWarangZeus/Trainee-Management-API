@@ -13,7 +13,7 @@ public class ProcessingJob
 
     public int Attempts { get; set; }
 
-    public string ErrorSummary { get; set; } = "";
+    public string ErrorSummary { get; set; } = null!;
 
     public DateTime StartedTime { get; set; }
 

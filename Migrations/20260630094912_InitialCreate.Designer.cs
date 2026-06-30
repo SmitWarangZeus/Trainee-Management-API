@@ -11,8 +11,8 @@ using TraineeManagement.api.Data;
 namespace TraineeManagement.api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260624064835_ProcessingJobCreate1")]
-    partial class ProcessingJobCreate1
+    [Migration("20260630094912_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,22 +33,22 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExpectedTechStack")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)");
@@ -73,19 +73,19 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Expertise")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)");
@@ -138,14 +138,14 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Feedback")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<int>("MentorId")
                         .HasColumnType("int");
 
                     b.Property<string>("ReviewStatus")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("ReviewedDate")
                         .HasColumnType("datetime(6)");
@@ -169,15 +169,15 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Notes")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("SubmissionUrl")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<DateTime>("SubmittedDate")
                         .HasColumnType("datetime(6)");
@@ -198,22 +198,22 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Checksum")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("OriginalFileName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<long>("SizeBytes")
                         .HasColumnType("bigint");
 
                     b.Property<string>("StorageFileName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("SubmissionId")
                         .HasColumnType("int");
@@ -249,11 +249,11 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("TraineeId")
                         .HasColumnType("int");
@@ -278,19 +278,19 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("TechStack")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)");
@@ -322,14 +322,14 @@ namespace TraineeManagement.api.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
