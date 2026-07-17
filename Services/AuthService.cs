@@ -26,8 +26,8 @@ namespace TraineeManagement.api.Services
             User user = new User
             {
                 Username = loginUser.Username,
-                Email = "admin@email.com",
-                Role = "admin",
+                Email = Environment.GetEnvironmentVariable("DUMMY_ADMIN_EMAIL")!,
+                Role = Environment.GetEnvironmentVariable("DUMMY_ADMIN_ROLE")!,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             };
