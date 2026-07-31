@@ -26,11 +26,12 @@ namespace TraineeManagement.api.Services
             User user = new User
             {
                 Username = loginUser.Username,
-                Email = Environment.GetEnvironmentVariable("DUMMY_ADMIN_EMAIL")!,
-                Role = Environment.GetEnvironmentVariable("DUMMY_ADMIN_ROLE")!,
+                Email = loginUser.Username.StartsWith("admin") ? Environment.GetEnvironmentVariable("DUMMY_ADMIN_EMAIL")! : Environment.GetEnvironmentVariable("DUMMY_TRAINEE_EMAIL")!,
+                Role = loginUser.Username.StartsWith("admin") ? Environment.GetEnvironmentVariable("DUMMY_ADMIN_ROLE")! : Environment.GetEnvironmentVariable("DUMMY_TRAINEE_ROLE")!,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             };
+            _logger.LogDebug(user.Email);
             user.SetPassword(loginUser.Password);
             _appDbContext.Users.Add(user);
             await _appDbContext.SaveChangesAsync();

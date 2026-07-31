@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "admin")]
 [Route("/api/submissions")]
 public class SubmissionController : ControllerBase
 {

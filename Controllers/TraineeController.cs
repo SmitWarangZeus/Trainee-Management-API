@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-// [Authorize]
 [Route("/api/trainees")]
 public class TraineeController : ControllerBase
 {
@@ -19,6 +18,7 @@ public class TraineeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search")] PaginationParams paginationParams)
     {
         PagedResponse<TraineeResponse> traineeResponses = await _service.GetAllAsync(paginationParams);
@@ -26,12 +26,14 @@ public class TraineeController : ControllerBase
     }
 
     [HttpGet("{Id:int}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetByIdAsync(int Id)
     {
         return Ok(await _service.GetByIdAsync(Id));
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> CreateAsync(CreateTraineeRequest createTrainee)
     {
         TraineeResponse traineeResponse = await _service.CreateAsync(createTrainee);
@@ -39,12 +41,14 @@ public class TraineeController : ControllerBase
     }
 
     [HttpPut("{Id:int}")]
+    [Authorize(Roles = "trainee")]
     public async Task<IActionResult> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
     {
         return Ok(await _service.UpdateAsync(Id, updateTrainee));
     }
 
     [HttpDelete("{Id:int}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteAsync(int Id)
     {
         bool response = await _service.DeleteAsync(Id);

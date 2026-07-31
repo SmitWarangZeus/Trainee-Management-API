@@ -24,6 +24,9 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
             
             UnAuthorizedException unAuthorized =>
                 (StatusCodes.Status401Unauthorized, "UnAuthorized", unAuthorized.Message, (IDictionary<string, string[]>?)null),
+            
+            ForbiddenException forbidden =>
+                (StatusCodes.Status403Forbidden, "Forbidden", forbidden.Message, (IDictionary<string, string[]>?)null),
 
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "Unexpected error", (IDictionary<string, string[]>?)null)
         };

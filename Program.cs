@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
 using TraineeManagement.api.Handlers;
 using RabbitMQ.Client;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +105,10 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 builder.Services.AddSingleton(await factory.CreateConnectionAsync());
+
+builder.Services.AddHttpContextAccessor();
+
+Env.Load();
 
 var app = builder.Build();
 

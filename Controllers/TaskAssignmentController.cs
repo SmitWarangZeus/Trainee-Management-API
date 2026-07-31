@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "admin")]
 [Route("/api/task-assignments")]
 public class TaskAssignmentController : ControllerBase
 {

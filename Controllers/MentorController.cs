@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace TraineeManagement.api.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "admin")]
 [Route("/api/mentors")]
 public class MentorController : ControllerBase
 {

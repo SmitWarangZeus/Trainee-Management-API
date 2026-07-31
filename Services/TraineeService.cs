@@ -5,6 +5,8 @@ using TraineeManagement.api.Data;
 using TraineeManagement.api.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace TraineeManagement.api.Services
 {
@@ -16,11 +18,14 @@ namespace TraineeManagement.api.Services
 
         private readonly RedisCacheService _cache;
 
-        public TraineeService(AppDbContext AppDbContext, ILogger<TraineeService> logger, RedisCacheService cache)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public TraineeService(AppDbContext AppDbContext, ILogger<TraineeService> logger, RedisCacheService cache, IHttpContextAccessor httpContextAccessor)
         {
             _appDbContext = AppDbContext;
             _logger = logger;
             _cache = cache;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<PagedResponse<TraineeResponse>> GetAllAsync(PaginationParams paginationParams)
@@ -77,6 +82,14 @@ namespace TraineeManagement.api.Services
 
         public async Task<TraineeResponse> UpdateAsync(int Id, UpdateTraineeRequest updateTrainee)
         {
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if (int.TryParse(userId, out int userID))
+            {
+                if (userID!=Id)
+                {
+                    throw new ForbiddenException("Access forbidden");
+                }
+            }
             Trainee? trainee = await _appDbContext.Trainees.FindAsync(Id);
             if (trainee==null)
             {
